@@ -1,4 +1,4 @@
-class Square {
+class loja {
 
     field int x, y)
 

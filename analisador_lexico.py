@@ -3,17 +3,27 @@ import re
 class AnalisadorLexico:
     regex = re.compile('".*"|[0-9]+|[a-zA-Z_]+[a-zA-Z0-9_]*|[+|*|/|\-|{|}|(|)|\[|\]|\.|,|;|<|>|=|~|&]')
     keyword = [
-        'class','constructor','function','method','field','static',
-        'var' ,'int','char','boolean' ,'void' ,'true','false','null',
-        'this','let','do','if','else','while','return'
+        'var','null','this','let','do','return'
     ]
+    keywordClass = ['class'] 
+    keywordConstructor = ['constructor'] 
+    keywordFunction = ['function'] 
+    keywordMethod = ['method'] 
+    keywordVarStaticType = ['field','static']
+    keywordVarType = ['int','char','boolean']
+    keywordFunctionType = ['void']
+    keywordBooleanType = ['true','false']
+    keywordConditional = ['if','else']
+    keywordLoop = ['while']
+
+
     symbol = '[+|*|/|{|}|(|)|.|,|;|<|>|=|~]'
     identifier = '[a-zA-Z_]+[a-zA-Z0-9_]*'
     integer = '[0-9]+'
     string = '".*"'
 
     def __init__(self):
-        self.arquivo = open('Square.jack', 'r').read()
+        self.arquivo = open('main.jack', 'r').read()
         self.arquivo = re.sub('//.*'," ", self.arquivo) #remover os comentário com //
         self.arquivo = re.sub('(/\*(.|\n)*?\*/)'," ", self.arquivo) #remover os comentário com /* */
         self.tokens = self.regex.findall(self.arquivo)
@@ -46,12 +56,32 @@ class AnalisadorLexico:
             return self.tokens[self.indice]
         return
 
-    def tipo(self): #tipo do indix
+    def tipo(self): #tipo do indix no xml
         token = self.buscartoken()
         if(token != None):
             if(re.match(self.identifier, token)):
                 if(token in self.keyword):
-                    return 'keyword'
+                    return 'keyword'              
+                elif(token in self.keywordClass):
+                    return 'keywordClass'
+                elif(token in self.keywordConstructor):
+                    return 'keywordConstructor'
+                elif(token in self.keywordFunction):
+                    return 'keywordFunction'
+                elif(token in self.keywordMethod):
+                    return 'keywordMethod'
+                elif(token in self.keywordVarStaticType):
+                    return 'keywordVarStaticType'
+                elif(token in self.keywordVarType):
+                    return 'keywordVarType'
+                elif(token in self.keywordFunctionType):
+                    return 'keywordFunctionType'
+                elif(token in self.keywordBooleanType):
+                    return 'keywordBooleanType'
+                elif(token in self.keywordConditional):
+                    return 'keywordConditional'
+                elif(token in self.keywordLoop):
+                    return 'keywordLoop'
                 else:
                     return 'identifier'
 

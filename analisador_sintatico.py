@@ -16,7 +16,7 @@ class AnalisadorSintatico:
             self.analisador_lexico.escrever(2, estado)
 
     def compilarClasse(self):
-        if(self.analisador_lexico.buscartoken() != "class"):
+        if(self.analisador_lexico.buscartoken() not in self.analisador_lexico.keywordClass): #mudança
             print('ERROR: Um keyword class era esperado')
             return
 
@@ -36,16 +36,16 @@ class AnalisadorSintatico:
         while(self.analisador_lexico.hatoken()):
             self.analisador_lexico.avancar()
             #ver tipo
-            while(self.analisador_lexico.buscartoken() in ["static", "field"]): 
+            while(self.analisador_lexico.buscartoken() in self.analisador_lexico.keywordVarStaticType): 
                 self.compilarClassVarDec()
 
-            while(self.analisador_lexico.buscartoken() in ["method", "constructor", "function"]):
+            while(self.analisador_lexico.buscartoken() in [self.analisador_lexico.keywordConstructor, self.analisador_lexico.keywordFunction, self.analisador_lexico.keywordMethod]):
                 self.compilarSubroutineDec()
 
         self.escreverEstado("class", 2)
 
     def compilarClassVarDec(self): #atributo
-        self.escreverEstado('classVarDec', 1)
+        self.escreverEstado('classVarDec', 1) #descrição variavel da class
 
         self.analisador_lexico.escrever()  # espaço para static ou field
         self.analisador_lexico.avancar()   
