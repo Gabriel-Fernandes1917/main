@@ -36,10 +36,11 @@ class AnalisadorSintatico:
         while(self.analisador_lexico.hatoken()):
             self.analisador_lexico.avancar()
             #ver tipo
-            while(self.analisador_lexico.buscartoken() in self.analisador_lexico.keywordVarStaticType): 
+            while(self.analisador_lexico.buscartoken() in self.analisador_lexico.keywordVarStaticType):                
                 self.compilarClassVarDec()
 
-            while(self.analisador_lexico.buscartoken() in [self.analisador_lexico.keywordConstructor, self.analisador_lexico.keywordFunction, self.analisador_lexico.keywordMethod]):
+            while(self.analisador_lexico.buscartoken() in [item for sublist in [self.analisador_lexico.keywordConstructor, self.analisador_lexico.keywordFunction, self.analisador_lexico.keywordMethod] for item in sublist]):
+                ##print("entrou n fun", self.analisador_lexico.buscartoken() in [item for sublist in [self.analisador_lexico.keywordConstructor, self.analisador_lexico.keywordFunction, self.analisador_lexico.keywordMethod] for item in sublist])
                 self.compilarSubroutineDec()
 
         self.escreverEstado("class", 2)
@@ -177,11 +178,11 @@ class AnalisadorSintatico:
                 self.ifStatement()
             elif(self.analisador_lexico.buscartoken() == "do"):
                 self.doStatement()
-            elif(self.analisador_lexico.buscartoken == "let"):
+            elif(self.analisador_lexico.buscartoken() == "let"):
                 self.letStatement()
-            elif(self.analisador_lexico.buscartoken == "while"):
+            elif(self.analisador_lexico.buscartoken() == "while"):
                 self.whileStatement()
-            elif(self.analisador_lexico.buscartoken == "return"):
+            elif(self.analisador_lexico.buscartoken() == "return"):
                 self.returnStatement()
             else:
                 while(self.analisador_lexico.buscartoken() != '}'):
@@ -271,7 +272,7 @@ class AnalisadorSintatico:
 
         if(self.analisador_lexico.tipo() != 'identifier'):
             raise Exception("Esperando por um identificador, mas um {} dado " .format(
-                self.analizador_lexico.tipo()))
+                self.analisador_lexico.tipo()))
 
         self.analisador_lexico.escrever()  # escreve o identificador
         self.analisador_lexico.avancar()
@@ -286,44 +287,44 @@ class AnalisadorSintatico:
     def letStatement(self):
         self.escreverEstado('letStatement', 1)
 
-        self.analizador_lexico.escrever()  # escreve  let
-        self.analizador_lexico.avancar()
+        self.analisador_lexico.escrever()  # escreve  let
+        self.analisador_lexico.avancar()
 
         if (self.analisador_lexico.tipo() != 'identifier'):
             raise Exception("Esperando por um identificador no lugar de {}" .format(
-                self.analizador_lexico.buscartoken()))
+                self.analisador_lexico.buscartoken()))
 
-        self.analizador_lexico.avancar()  # escreve o identificador
-        self.analizador_lexico.escrever()
+        self.analisador_lexico.avancar()  # escreve o identificador
+        self.analisador_lexico.escrever()
 
         while(self.analisador_lexico.buscartoken() == '['):
-            self.analizador_lexico.escrever()  # escreve [
-            self.analizador_lexico.avancar()
+            self.analisador_lexico.escrever()  # escreve [
+            self.analisador_lexico.avancar()
 
             self.compilarExpression()
 
             if (self.analisador_lexico.buscartoken() != ']'):
                 raise Exception("Esperando por um ] no lugar de {}" .format(
-                    self.analizador_lexico.buscartoken()))
+                    self.analisador_lexico.buscartoken()))
 
-            self.analizador_lexico.escrever()  # escreve ]
-            self.analizador_lexico.avancar()
+            self.analisador_lexico.escrever()  # escreve ]
+            self.analisador_lexico.avancar()
 
         if (self.analisador_lexico.buscartoken() != '='):
             raise Exception("Esperando por um = no lugar de {}" .format(
-                self.analizador_lexico.buscartoken()))
+                self.analisador_lexico.buscartoken()))
 
-        self.analizador_lexico.escrever()  # escreve =
-        self.analizador_lexico.avancar()
+        self.analisador_lexico.escrever()  # escreve =
+        self.analisador_lexico.avancar()
 
         self.compilarExpression()
 
         if (self.analisador_lexico.buscartoken() != ';'):
             raise Exception("Esperando por um ; no lugar de {}" .format(
-                self.analizador_lexico.buscartoken()))
+                self.analisador_lexico.buscartoken()))
 
-        self.analizador_lexico.escrever()  # escreve ;
-        self.analizador_lexico.avancar()
+        self.analisador_lexico.escrever()  # escreve ;
+        self.analisador_lexico.avancar()
 
         self.escreverEstado('letStatement', 2)
 
@@ -332,13 +333,12 @@ class AnalisadorSintatico:
 
         self.analisador_lexico.escrever()  # escreve while
         self.analisador_lexico.avancar()
-
         if(self.analisador_lexico.buscartoken() != '['): #mudança nossa
             raise Exception("Era esperado um [ no lugar de {0}".format(
                 self.analisador_lexico.buscartoken()))
 
-        self.analizador_lexico.escrever()  # escreve (
-        self.analizador_lexico.avancar()
+        self.analisador_lexico.escrever()  # escreve (
+        self.analisador_lexico.avancar()
 
         self.compilarExpression()
 

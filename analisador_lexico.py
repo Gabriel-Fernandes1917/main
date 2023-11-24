@@ -3,7 +3,7 @@ import re
 class AnalisadorLexico:
     regex = re.compile('".*"|[0-9]+|[a-zA-Z_]+[a-zA-Z0-9_]*|[+|*|/|\-|{|}|(|)|\[|\]|\.|,|;|<|>|=|~|&]')
     keyword = [
-        'var','null','this','let','do','return'
+        'var','null','this','let','do','return', 'constructor'
     ]
     keywordClass = ['class'] 
     keywordConstructor = ['constructor'] 
